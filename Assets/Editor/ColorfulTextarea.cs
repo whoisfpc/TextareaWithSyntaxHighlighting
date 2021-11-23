@@ -34,6 +34,7 @@ public class ColorfulTextarea
     {
         codeFont = Font.CreateDynamicFontFromOSFont(DEFAULT_FONT, fontSize);
         textContainer = ScriptableObject.CreateInstance<TextContainer>();
+        textContainer.hideFlags = HideFlags.DontSave;
     }
 
     public void OnDestroy()
@@ -62,6 +63,13 @@ public class ColorfulTextarea
             backStyle.wordWrap = false;
             frontStyle = new GUIStyle(backStyle);
             frontStyle.richText = true;
+        }
+        
+        if (_codeFont == null)
+        {
+            codeFont = Font.CreateDynamicFontFromOSFont(DEFAULT_FONT, fontSize);
+            backStyle.font = _codeFont;
+            frontStyle.font = _codeFont;
         }
 
         backStyle.fontSize = fontSize;
