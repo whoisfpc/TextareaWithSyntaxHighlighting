@@ -33,7 +33,9 @@ public class ColorfulTextarea
     public void Awake()
     {
         codeFont = Font.CreateDynamicFontFromOSFont(DEFAULT_FONT, fontSize);
+        _codeFont.hideFlags = HideFlags.DontSave;
         textContainer = ScriptableObject.CreateInstance<TextContainer>();
+        _textContainer.hideFlags = HideFlags.DontSave;
     }
 
     public void OnDestroy()
