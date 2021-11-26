@@ -65,11 +65,11 @@ public class ColorfulTextarea
             frontStyle.richText = true;
         }
         
-        if (_codeFont == null)
+        if (codeFont == null)
         {
             codeFont = Font.CreateDynamicFontFromOSFont(DEFAULT_FONT, fontSize);
-            backStyle.font = _codeFont;
-            frontStyle.font = _codeFont;
+            backStyle.font = codeFont;
+            frontStyle.font = codeFont;
         }
 
         backStyle.fontSize = fontSize;
