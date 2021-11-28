@@ -5,6 +5,24 @@ using UnityEditor;
 [System.Serializable]
 public class ColorfulTextarea
 {
+    private const string TEST_TEXT = @"
+local sh = require(""syntaxhighlight"")
+
+local html = sh.highlight_to_html(""lua"", [[
+
+local function hello_world(times)
+  for i=1,times do
+    print(""hello world"")
+  end
+end
+
+]])
+
+local x = ""local var = in string""
+
+print(html)
+";
+
     public class TextContainer : ScriptableObject
     {
         public string text;
@@ -13,6 +31,7 @@ public class ColorfulTextarea
     private const string DEFAULT_FONT = "Consolas";
     private const string CONTROL_NAME = "ColorfulTextarea";
     public bool syntaxColor = true;
+    public bool richText = true;
 
     public int fontSize = 20;
 
@@ -30,11 +49,15 @@ public class ColorfulTextarea
     private bool textChangedForUndo = false;
     private bool forceIncrementCurrentGroup = false;
 
+    private LuaHighlighter highlighter;
+
     public void Awake()
     {
         codeFont = Font.CreateDynamicFontFromOSFont(DEFAULT_FONT, fontSize);
         textContainer = ScriptableObject.CreateInstance<TextContainer>();
         textContainer.hideFlags = HideFlags.DontSave;
+        textContainer.text = TEST_TEXT;
+        highlighter = new LuaHighlighter();
     }
 
     public void OnDestroy()
@@ -45,12 +68,19 @@ public class ColorfulTextarea
         textContainer = null;
     }
 
-    private void Highlighter()
+    private void Highlight()
     {
         if (cachedText != textContainer.text)
         {
             cachedColorText = cachedText = textContainer.text;
-            cachedColorText = $"<color=red>{cachedColorText}</color>";
+            try
+            {
+                cachedColorText = highlighter.Highlight(cachedColorText);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError(ex);
+            }
         }
     }
 
@@ -74,6 +104,7 @@ public class ColorfulTextarea
 
         backStyle.fontSize = fontSize;
         frontStyle.fontSize = fontSize;
+        frontStyle.richText = richText;
 
         if (GUI.GetNameOfFocusedControl() == CONTROL_NAME)
         {
@@ -122,7 +153,7 @@ public class ColorfulTextarea
         {
             var oldBackgroundColor = GUI.backgroundColor;
             GUI.backgroundColor = Color.clear;
-            Highlighter();
+            Highlight();
             frontStyle.Draw(GUILayoutUtility.GetLastRect(), new GUIContent(cachedColorText), 0);
             GUI.backgroundColor = oldBackgroundColor;
         }
