@@ -23,11 +23,6 @@ local x = ""local var = in string""
 print(html)
 ";
 
-    public class TextContainer : ScriptableObject
-    {
-        public string text;
-    }
-
     private const string DEFAULT_FONT = "Consolas";
     private const string CONTROL_NAME = "ColorfulTextarea";
     public bool syntaxColor = true;

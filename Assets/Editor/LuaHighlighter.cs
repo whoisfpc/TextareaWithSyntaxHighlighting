@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Text;
 
+[System.Serializable]
 public class LuaHighlighter
 {
     private static readonly string[] KEYWORDS = 
